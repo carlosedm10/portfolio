@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  backend:
+    build: my-portfolio-app/backend
+    container_name: portfolio-backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - backend-volume:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  frontend:
+    build: my-portfolio-app/frontend
+    container_name: portfolio-frontend
+    volumes:
+      - frontend-volume:/app
+    ports:
+      - "3000:3000"
+
+  db:
+    image: postgres:13
+    container_name: portfolio-db
+    environment:
+      POSTGRES_USER: portfolio_user
+      POSTGRES_PASSWORD: portfolio_pass
+      POSTGRES_DB: portfolio_db
+    ports:
+      - "5432:5432"
+
+volumes:
+  backend-volume:
+  frontend-volume:
